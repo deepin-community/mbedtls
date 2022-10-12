@@ -1,0 +1,8 @@
+Document: libmbedtls-doc
+Title: mbed TLS API Documentation
+Abstract: Automatically generated mbed TLS source code documentation.
+Section: Programming/C
+
+Format: HTML
+Index: /usr/share/doc/libmbedtls-dev/apidoc/index.html
+Files: /usr/share/doc/libmbedtls-dev/apidoc/*

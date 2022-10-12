@@ -1,0 +1,125 @@
+Source: mbedtls
+Section: libs
+Priority: optional
+Maintainer: James Cowgill <jcowgill@debian.org>
+Standards-Version: 4.5.0
+Build-Depends: cmake, debhelper-compat (= 12)
+Build-Depends-Arch: faketime, python3
+Build-Depends-Indep: doxygen, graphviz
+Rules-Requires-Root: no
+Homepage: https://github.com/ARMmbed/mbedtls
+Vcs-Git: https://salsa.debian.org/debian/mbedtls.git
+Vcs-Browser: https://salsa.debian.org/debian/mbedtls
+
+Package: libmbedtls-dev
+Architecture: any
+Section: libdevel
+Multi-Arch: same
+Depends:
+ libmbedcrypto3 (= ${binary:Version}),
+ libmbedtls12 (= ${binary:Version}),
+ libmbedx509-0 (= ${binary:Version}),
+ ${misc:Depends}
+Suggests: libmbedtls-doc
+Description: lightweight crypto and SSL/TLS library - development files
+ mbed TLS (formerly known as PolarSSL) is a lean open source crypto library for
+ providing SSL and TLS support in your programs. It offers an intuitive API and
+ documented header files, so you can actually understand what the code does.
+ It features:
+  - Symmetric algorithms, like AES, Blowfish, Triple-DES, DES, ARC4, Camellia
+    and XTEA
+  - Hash algorithms, like SHA-1, SHA-2, RIPEMD-160 and MD5
+  - Entropy pool and random generators, like CTR-DRBG and HMAC-DRBG
+  - Public key algorithms, like RSA, Elliptic Curves, Diffie-Hellman, ECDSA
+    and ECDH
+  - TLS 1.0, 1.1 and 1.2
+  - Abstraction layers for ciphers, hashes, public key operations, platform
+    abstraction and threading
+ .
+ This package contains the header files and static libraries for mbed TLS.
+
+Package: libmbedcrypto3
+Architecture: any
+Multi-Arch: same
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: lightweight crypto and SSL/TLS library - crypto library
+ mbed TLS (formerly known as PolarSSL) is a lean open source crypto library for
+ providing SSL and TLS support in your programs. It offers an intuitive API and
+ documented header files, so you can actually understand what the code does.
+ It features:
+  - Symmetric algorithms, like AES, Blowfish, Triple-DES, DES, ARC4, Camellia
+    and XTEA
+  - Hash algorithms, like SHA-1, SHA-2, RIPEMD-160 and MD5
+  - Entropy pool and random generators, like CTR-DRBG and HMAC-DRBG
+  - Public key algorithms, like RSA, Elliptic Curves, Diffie-Hellman, ECDSA
+    and ECDH
+  - TLS 1.0, 1.1 and 1.2
+  - Abstraction layers for ciphers, hashes, public key operations, platform
+    abstraction and threading
+ .
+ This package contains the shared library handling cryptography.
+
+Package: libmbedtls12
+Architecture: any
+Multi-Arch: same
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: lightweight crypto and SSL/TLS library - tls library
+ mbed TLS (formerly known as PolarSSL) is a lean open source crypto library for
+ providing SSL and TLS support in your programs. It offers an intuitive API and
+ documented header files, so you can actually understand what the code does.
+ It features:
+  - Symmetric algorithms, like AES, Blowfish, Triple-DES, DES, ARC4, Camellia
+    and XTEA
+  - Hash algorithms, like SHA-1, SHA-2, RIPEMD-160 and MD5
+  - Entropy pool and random generators, like CTR-DRBG and HMAC-DRBG
+  - Public key algorithms, like RSA, Elliptic Curves, Diffie-Hellman, ECDSA
+    and ECDH
+  - TLS 1.0, 1.1 and 1.2
+  - Abstraction layers for ciphers, hashes, public key operations, platform
+    abstraction and threading
+ .
+ This package contains the shared library handling TLS.
+
+Package: libmbedx509-0
+Architecture: any
+Multi-Arch: same
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: lightweight crypto and SSL/TLS library - x509 certificate library
+ mbed TLS (formerly known as PolarSSL) is a lean open source crypto library for
+ providing SSL and TLS support in your programs. It offers an intuitive API and
+ documented header files, so you can actually understand what the code does.
+ It features:
+  - Symmetric algorithms, like AES, Blowfish, Triple-DES, DES, ARC4, Camellia
+    and XTEA
+  - Hash algorithms, like SHA-1, SHA-2, RIPEMD-160 and MD5
+  - Entropy pool and random generators, like CTR-DRBG and HMAC-DRBG
+  - Public key algorithms, like RSA, Elliptic Curves, Diffie-Hellman, ECDSA
+    and ECDH
+  - TLS 1.0, 1.1 and 1.2
+  - Abstraction layers for ciphers, hashes, public key operations, platform
+    abstraction and threading
+ .
+ This package contains the shared library handling x509 certificates.
+
+Package: libmbedtls-doc
+Architecture: all
+Multi-Arch: foreign
+Section: doc
+Depends: libjs-jquery, ${misc:Depends}
+Suggests: libmbedtls-dev
+Description: lightweight crypto and SSL/TLS library - documentation
+ mbed TLS (formerly known as PolarSSL) is a lean open source crypto library for
+ providing SSL and TLS support in your programs. It offers an intuitive API and
+ documented header files, so you can actually understand what the code does.
+ It features:
+  - Symmetric algorithms, like AES, Blowfish, Triple-DES, DES, ARC4, Camellia
+    and XTEA
+  - Hash algorithms, like SHA-1, SHA-2, RIPEMD-160 and MD5
+  - Entropy pool and random generators, like CTR-DRBG and HMAC-DRBG
+  - Public key algorithms, like RSA, Elliptic Curves, Diffie-Hellman, ECDSA
+    and ECDH
+  - TLS 1.0, 1.1 and 1.2
+  - Abstraction layers for ciphers, hashes, public key operations, platform
+    abstraction and threading
+ .
+ This package contains the API documentation.

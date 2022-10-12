@@ -1,0 +1,54 @@
+#!/bin/sh
+# autopkgtest check: Build and run a very simple program against mbedtls
+
+set -e
+
+# Require $AUTOPKGTEST_TMP for temporary build files
+if [ -z "$AUTOPKGTEST_TMP" ]
+then
+	echo "Required envvar \"$AUTOPKGTEST_TMP\"is not set" >&2
+	exit 1
+fi
+
+cd "$AUTOPKGTEST_TMP"
+cat <<EOF > mbedtls_sha1.c
+#include <mbedtls/md.h>
+#include <stdio.h>
+#include <string.h>
+
+int main(int argc, char* argv[])
+{
+    unsigned char output[20];
+    int i;
+
+    if (mbedtls_md(mbedtls_md_info_from_type(MBEDTLS_MD_SHA1),
+	    (unsigned char*) argv[1], strlen(argv[1]), output) != 0)
+    {
+        fputs("mbedtls_md failed", stderr);
+        return 1;
+    }
+
+    for (i = 0; i < sizeof(output); i++)
+        printf("%02x", output[i]);
+
+    printf("\n");
+    return 0;
+}
+EOF
+
+# Build program shared + statically
+gcc -Wall -Werror -o mbedtls_sha1 mbedtls_sha1.c -lmbedcrypto
+echo "build1: OK"
+gcc -Wall -Werror -static -o mbedtls_sha1_static mbedtls_sha1.c -lmbedcrypto
+echo "build2: OK"
+
+# Run it on a few strings
+[ $(./mbedtls_sha1 '')    = 'da39a3ee5e6b4b0d3255bfef95601890afd80709' ]
+echo "run1: OK"
+[ $(./mbedtls_sha1 hello) = 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d' ]
+echo "run2: OK"
+
+[ $(./mbedtls_sha1_static '')    = 'da39a3ee5e6b4b0d3255bfef95601890afd80709' ]
+echo "run3: OK"
+[ $(./mbedtls_sha1_static hello) = 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d' ]
+echo "run4: OK"

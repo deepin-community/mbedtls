@@ -1,0 +1,2 @@
+Tests: build selftest
+Depends: gcc, libc-dev, libmbedtls-dev

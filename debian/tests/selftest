@@ -1,0 +1,23 @@
+#!/bin/sh
+# autopkgtest check: Build and run the mbedtls "selftest" program
+
+set -e
+
+# Require $AUTOPKGTEST_TMP for temporary build files
+if [ -z "$AUTOPKGTEST_TMP" ]
+then
+	echo "Required envvar \"$AUTOPKGTEST_TMP\"is not set" >&2
+	exit 1
+fi
+
+# Build mbedtls_selftest shared / statically
+cc -Wall -Werror programs/test/selftest.c -o "$AUTOPKGTEST_TMP/mbedtls_selftest" -lmbedtls -lmbedx509 -lmbedcrypto
+echo "build1: OK"
+cc -Wall -Werror -static programs/test/selftest.c -o "$AUTOPKGTEST_TMP/mbedtls_selftest_static" -lmbedtls -lmbedx509 -lmbedcrypto -pthread
+echo "build2: OK"
+
+# Run the testsuite twice
+"$AUTOPKGTEST_TMP/mbedtls_selftest"
+echo "run1: OK"
+"$AUTOPKGTEST_TMP/mbedtls_selftest_static"
+echo "run2: OK"

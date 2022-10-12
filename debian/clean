@@ -1,0 +1,5 @@
+apidoc/
+tests/data_files/mpi_write
+tests/data_files/hmac_drbg_seed
+tests/data_files/ctr_drbg_seed
+tests/data_files/entropy_seed

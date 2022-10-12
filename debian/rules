@@ -1,0 +1,50 @@
+#!/usr/bin/make -f
+
+include /usr/share/dpkg/architecture.mk
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+UPSTREAM_DATE = $(shell awk '/^= .* [0-9-]*$$/ { print $$NF; exit }' ChangeLog)
+
+CONFIG_H = include/mbedtls/config.h
+define CONFIG_ENABLE
+	@echo Enabling config.h option $(1)
+	@! grep -q '^\#define $(1)$$' $(CONFIG_H) || \
+		(echo ' Already enabled' && false)
+	@[ $$(grep -c '^//\#define $(1)$$' $(CONFIG_H)) -eq 1 ] || \
+		(echo " Can't find exactly one option to enable" && false)
+	@sed -i 's|^//\#define $(1)$$|\#define $(1)|' $(CONFIG_H)
+endef
+
+%:
+	dh $@ --buildsystem=cmake
+
+override_dh_auto_clean:
+	dh_auto_clean
+	[ ! -e $(CONFIG_H).bak ] || mv $(CONFIG_H).bak $(CONFIG_H)
+
+override_dh_auto_configure:
+	cp $(CONFIG_H) $(CONFIG_H).bak
+	$(call CONFIG_ENABLE,MBEDTLS_DEPRECATED_WARNING)
+	$(call CONFIG_ENABLE,MBEDTLS_HAVEGE_C)
+	$(call CONFIG_ENABLE,MBEDTLS_MD2_C)
+	$(call CONFIG_ENABLE,MBEDTLS_MD4_C)
+	$(call CONFIG_ENABLE,MBEDTLS_THREADING_C)
+	$(call CONFIG_ENABLE,MBEDTLS_THREADING_PTHREAD)
+	dh_auto_configure -- \
+	 -DLIB_INSTALL_DIR=lib/$(DEB_HOST_MULTIARCH) \
+	 -DUSE_STATIC_MBEDTLS_LIBRARY=ON \
+	 -DUSE_SHARED_MBEDTLS_LIBRARY=ON
+
+override_dh_auto_build-indep:
+	dh_auto_build -- apidoc
+
+# Use faketime to prevent testsuite timebombing in the future
+override_dh_auto_test-arch:
+	faketime '$(UPSTREAM_DATE)' dh_auto_test
+
+override_dh_auto_test-indep:
+override_dh_auto_install-indep:
+
+override_dh_installdocs:
+	dh_installdocs -X.md5
