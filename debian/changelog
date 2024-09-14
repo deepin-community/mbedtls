@@ -1,3 +1,158 @@
+mbedtls (2.28.8-1) unstable; urgency=medium
+
+  * New upstream version 2.28.8
+  * d/libmbedtls-dev.install: install new pkg-config files (Closes: #900015)
+  * d/.symbols: add new PSA symbols
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Sun, 31 Mar 2024 20:02:32 +0200
+
+mbedtls (2.28.7-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Rename libraries for 64-bit time_t transition.  Closes: #1062859
+
+ -- Graham Inggs <ginggs@debian.org>  Thu, 29 Feb 2024 12:19:38 +0000
+
+mbedtls (2.28.7-1) unstable; urgency=medium
+
+  * New upstream version 2.28.7
+    - Fixes CVE-2024-23170
+    - Fixes CVE-2024-23775
+  * d/libmbedcrypto7.symbols: add new MPI symbols
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Sat, 27 Jan 2024 13:12:37 +0100
+
+mbedtls (2.28.6-1) unstable; urgency=medium
+
+  * New upstream version 2.28.6
+  * d/copyright: now available under Apache-2.0 or GPL-2+
+  * d/copyright: update debian/ copyright information
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Mon, 20 Nov 2023 09:34:09 +0100
+
+mbedtls (2.28.5-1) unstable; urgency=medium
+
+  * Team upload.
+  * debian/control: Update URL to use team's git
+  * New upstream version 2.28.5
+  * debian/libmbedcrypto7.symbols: Fix symbols for lintian
+
+ -- Philippe Coval <rzr@users.sf.net>  Wed, 11 Oct 2023 19:57:04 +0200
+
+mbedtls (2.28.4-1) unstable; urgency=medium
+
+  * New upstream version 2.28.4
+  * d/control: switch ownership to the Debian IoT Team
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Fri, 18 Aug 2023 11:41:40 +0200
+
+mbedtls (2.28.3-1) unstable; urgency=medium
+
+  * New upstream version 2.28.3
+    We are now in the bookworm hard freeze, but I still think that releasing
+    this now is sensible. Importing new upstream LTS releases is the only way
+    of properly backporting mbedtls' security fixes, so this release should be
+    ported to bookworm, sooner or later.
+  * d/{control,rules}: honour nocheck and nodoc profiles
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Wed, 29 Mar 2023 21:39:41 +0200
+
+mbedtls (2.28.2-1) unstable; urgency=medium
+
+  * New upstream version 2.28.2
+  * d/rules: remove .map files from libmbedtls-doc.
+    Thanks to Dennis Filder for reporting
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Thu, 15 Dec 2022 22:02:03 +0100
+
+mbedtls (2.28.1-1) unstable; urgency=medium
+
+  * New upstream version 2.28.1
+    - Fixes CVE-2022-35409
+  * d/libmbedtls14.symbols: add mbedtls_ssl_check_curve_tls_id
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Tue, 12 Jul 2022 22:58:03 +0200
+
+mbedtls (2.28.0-2) unstable; urgency=medium
+
+  * d/copyright: add Upstream-Contact
+  * Update upstream Git repository URL
+  * Fix build reproducibility
+  * Fix cross compilation
+  * CVE-2021-43666 fixed in 2.28.0
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Sun, 03 Apr 2022 12:22:05 +0200
+
+mbedtls (2.28.0-1) unstable; urgency=medium
+
+  * Upload version 2.28 to unstable
+  * d/control: set myself as the Maintainer. Closes: #1004647
+  * d/rules: make builds reproducible
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Wed, 16 Feb 2022 11:52:38 +0100
+
+mbedtls (2.28.0-0.3) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Upload to unstable
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Wed, 16 Feb 2022 16:38:59 +0000
+
+mbedtls (2.28.0-0.2) experimental; urgency=medium
+
+  * Non-maintainer upload
+  * d/copyright: MbedTLS is now Apache-2.0 only
+  * d/libmbedcrypto7.symbols: mark arch-dependent symbols
+  * d/watch: fix LTS watch
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Sun, 16 Jan 2022 21:45:45 +0100
+
+mbedtls (2.28.0-0.1) experimental; urgency=medium
+
+  * Non-maintainer upload
+  * New upstream release
+    - CVE-2021-44732. Closes: #1002631
+    - CVE-2020-36477 fixed in 2.24.0
+  * Enable CMAC support. Closes: #994681
+  * Enable DTLS SRTP support. Closes: #1001862
+  * Rename libraries due to upstream SONAME bump
+  * d/libmbed{crypto,tls}*.symbols:
+    - Update all symbol versions to 2.28
+  * d/watch: use GitHub's API, look only for LTS releases
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Mon, 27 Dec 2021 15:17:15 +0100
+
+mbedtls (2.16.11-0.3) unstable; urgency=medium
+
+  * Non-maintainer upload
+  * Drop CMAC support as it breaks ABI compat. Closes #1000289
+    - Updated libmbedcrypto3.symbols
+  * CVE-2021-24119 fixed in 2.16.10
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Fri, 26 Nov 2021 16:53:38 +0100
+
+mbedtls (2.16.11-0.2) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  [ Steve Langasek ]
+  * Make autopkgtests cross-test-friendly (Closes: #953143).
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Sat, 20 Nov 2021 22:30:00 +0100
+
+mbedtls (2.16.11-0.1) unstable; urgency=medium
+
+  * Non-maintainer upload
+  * New upstream release
+  * Enable CMAC support. Closes: #994681
+    - Updated libmbedcrypto3.symbols
+  * d/control: Bump Standards-Version to 4.6.0
+  * d/control: Use debhelper-compat (= 13)
+  * d/rules: use scripts/config.pl instead of manually editing config.h
+  * d/rules: add -DENABLE_PROGRAMS=OFF to skip building not installed binaries
+  * Add debian/upstream/metadata file
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Wed, 17 Nov 2021 17:08:07 +0100
+
 mbedtls (2.16.9-0.1) unstable; urgency=medium
 
   * Non-maintainer upload

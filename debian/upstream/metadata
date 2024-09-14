@@ -1,0 +1,8 @@
+Bug-Database: https://github.com/Mbed-TLS/mbedtls/issues
+Bug-Submit: https://github.com/Mbed-TLS/mbedtls/issues/new
+Changelog: https://raw.githubusercontent.com/Mbed-TLS/mbedtls/development/ChangeLog
+Documentation: https://tls.mbed.org/api/
+Other-References: https://tls.mbed.org
+Repository: https://github.com/Mbed-TLS/mbedtls.git
+Repository-Browse: https://github.com/Mbed-TLS/mbedtls
+Security-Contact: mbed-tls-security@lists.trustedfirmware.org

@@ -10,10 +10,16 @@ then
 	exit 1
 fi
 
+if [ -n "${DEB_HOST_GNU_TYPE:-}" ]; then
+    CROSS_COMPILE="$DEB_HOST_GNU_TYPE-"
+else
+    CROSS_COMPILE=
+fi
+
 # Build mbedtls_selftest shared / statically
-cc -Wall -Werror programs/test/selftest.c -o "$AUTOPKGTEST_TMP/mbedtls_selftest" -lmbedtls -lmbedx509 -lmbedcrypto
+${CROSS_COMPILE}gcc -Wall -Werror programs/test/selftest.c -o "$AUTOPKGTEST_TMP/mbedtls_selftest" -lmbedtls -lmbedx509 -lmbedcrypto
 echo "build1: OK"
-cc -Wall -Werror -static programs/test/selftest.c -o "$AUTOPKGTEST_TMP/mbedtls_selftest_static" -lmbedtls -lmbedx509 -lmbedcrypto -pthread
+${CROSS_COMPILE}gcc -Wall -Werror -static programs/test/selftest.c -o "$AUTOPKGTEST_TMP/mbedtls_selftest_static" -lmbedtls -lmbedx509 -lmbedcrypto -pthread
 echo "build2: OK"
 
 # Run the testsuite twice

@@ -1,3 +1,11 @@
 version=4
-opts=filenamemangle=s/.+\/v?(\d\S+)\.tar\.gz/mbedtls-$1\.tar\.gz/ \
-  https://github.com/ARMmbed/mbedtls/tags .*/v?(\d\S+)\.tar\.gz debian uupdate
+#just show LTS updates
+opts="searchmode=plain, \
+  filenamemangle=s/.*v@ANY_VERSION@/@PACKAGE@-$1\.tar\.gz/, \
+  pgpmode=none" \
+https://api.github.com/repos/Mbed-TLS/mbedtls/tags \
+https://api.github.com/repos/Mbed-TLS/mbedtls/tarball/refs/tags/v(2\.28\.\d+)
+
+#show all versions
+#opts=filenamemangle=s/.+\/v?(\d\S+)\.tar\.gz/mbedtls-$1\.tar\.gz/ \
+#  https://github.com/Mbed-TLS/mbedtls/tags .*/v?(\d\S+)\.tar\.gz
