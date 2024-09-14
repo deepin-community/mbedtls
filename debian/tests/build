@@ -11,6 +11,13 @@ then
 fi
 
 cd "$AUTOPKGTEST_TMP"
+
+if [ -n "${DEB_HOST_GNU_TYPE:-}" ]; then
+    CROSS_COMPILE="$DEB_HOST_GNU_TYPE-"
+else
+    CROSS_COMPILE=
+fi
+
 cat <<EOF > mbedtls_sha1.c
 #include <mbedtls/md.h>
 #include <stdio.h>
@@ -37,9 +44,9 @@ int main(int argc, char* argv[])
 EOF
 
 # Build program shared + statically
-gcc -Wall -Werror -o mbedtls_sha1 mbedtls_sha1.c -lmbedcrypto
+${CROSS_COMPILE}gcc -Wall -Werror -o mbedtls_sha1 mbedtls_sha1.c -lmbedcrypto
 echo "build1: OK"
-gcc -Wall -Werror -static -o mbedtls_sha1_static mbedtls_sha1.c -lmbedcrypto
+${CROSS_COMPILE}gcc -Wall -Werror -static -o mbedtls_sha1_static mbedtls_sha1.c -lmbedcrypto
 echo "build2: OK"
 
 # Run it on a few strings

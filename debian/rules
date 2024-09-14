@@ -1,50 +1,67 @@
 #!/usr/bin/make -f
 
-include /usr/share/dpkg/architecture.mk
-
-export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+# LTO is disabled until https://github.com/Mbed-TLS/mbedtls/issues/5906 is fixed
+# optimize=-lto because I use CMake's LTO
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all optimize=+all,-lto qa=+all
+# Required as libmbedtls-dev ships .a files
+#export DEB_CFLAGS_MAINT_APPEND   = -ffat-lto-objects
+#export DEB_CXXFLAGS_MAINT_APPEND = -ffat-lto-objects
 
 UPSTREAM_DATE = $(shell awk '/^= .* [0-9-]*$$/ { print $$NF; exit }' ChangeLog)
 
-CONFIG_H = include/mbedtls/config.h
-define CONFIG_ENABLE
-	@echo Enabling config.h option $(1)
-	@! grep -q '^\#define $(1)$$' $(CONFIG_H) || \
-		(echo ' Already enabled' && false)
-	@[ $$(grep -c '^//\#define $(1)$$' $(CONFIG_H)) -eq 1 ] || \
-		(echo " Can't find exactly one option to enable" && false)
-	@sed -i 's|^//\#define $(1)$$|\#define $(1)|' $(CONFIG_H)
-endef
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+  test := true
+else
+  test := false
+endif
+
+ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS)))
+  doc := true
+else
+  doc := false
+endif
 
 %:
 	dh $@ --buildsystem=cmake
 
-override_dh_auto_clean:
-	dh_auto_clean
+CONFIG_H = include/mbedtls/config.h
+
+execute_after_dh_auto_clean:
 	[ ! -e $(CONFIG_H).bak ] || mv $(CONFIG_H).bak $(CONFIG_H)
 
 override_dh_auto_configure:
 	cp $(CONFIG_H) $(CONFIG_H).bak
-	$(call CONFIG_ENABLE,MBEDTLS_DEPRECATED_WARNING)
-	$(call CONFIG_ENABLE,MBEDTLS_HAVEGE_C)
-	$(call CONFIG_ENABLE,MBEDTLS_MD2_C)
-	$(call CONFIG_ENABLE,MBEDTLS_MD4_C)
-	$(call CONFIG_ENABLE,MBEDTLS_THREADING_C)
-	$(call CONFIG_ENABLE,MBEDTLS_THREADING_PTHREAD)
+	scripts/config.py set MBEDTLS_DEPRECATED_WARNING
+	scripts/config.py set MBEDTLS_HAVEGE_C
+	scripts/config.py set MBEDTLS_MD2_C
+	scripts/config.py set MBEDTLS_MD4_C
+	scripts/config.py set MBEDTLS_THREADING_C
+	scripts/config.py set MBEDTLS_THREADING_PTHREAD
+	scripts/config.py set MBEDTLS_CMAC_C
+	scripts/config.py set MBEDTLS_SSL_DTLS_SRTP
 	dh_auto_configure -- \
-	 -DLIB_INSTALL_DIR=lib/$(DEB_HOST_MULTIARCH) \
-	 -DUSE_STATIC_MBEDTLS_LIBRARY=ON \
-	 -DUSE_SHARED_MBEDTLS_LIBRARY=ON
+		-DLIB_INSTALL_DIR="lib/$(DEB_HOST_MULTIARCH)" \
+		-DUSE_STATIC_MBEDTLS_LIBRARY=ON \
+		-DUSE_SHARED_MBEDTLS_LIBRARY=ON \
+		-DENABLE_PROGRAMS=OFF \
+		-DENABLE_TESTING=$(test) \
+		-DCMAKE_BUILD_RPATH_USE_ORIGIN=ON
+#		-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
+#		-DCMAKE_POLICY_DEFAULT_CMP0069=NEW
 
+ifeq ($(doc),true)
 override_dh_auto_build-indep:
-	dh_auto_build -- apidoc
+	dh_auto_build --indep -- apidoc
+endif
 
 # Use faketime to prevent testsuite timebombing in the future
 override_dh_auto_test-arch:
-	faketime '$(UPSTREAM_DATE)' dh_auto_test
+	faketime '$(UPSTREAM_DATE)' dh_auto_test --no-parallel
 
 override_dh_auto_test-indep:
 override_dh_auto_install-indep:
 
-override_dh_installdocs:
-	dh_installdocs -X.md5
+ifeq ($(doc),true)
+execute_after_dh_installdocs-indep:
+	dh_doxygen --indep
+endif

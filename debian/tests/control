@@ -1,2 +1,2 @@
-Tests: build selftest
-Depends: gcc, libc-dev, libmbedtls-dev
+Tests: build, selftest
+Depends: @, gcc, libc6-dev | libc-dev
