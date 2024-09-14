@@ -1,4 +1,4 @@
-libmbedtls.so.14 libmbedtls14t64 #MINVER#
+libmbedtls.so.14 libmbedtls14 #MINVER#
 * Build-Depends-Package: libmbedtls-dev
  mbedtls_debug_print_buf@Base 2.28.0
  mbedtls_debug_print_crt@Base 2.28.0

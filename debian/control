@@ -17,9 +17,9 @@ Architecture: any
 Section: libdevel
 Multi-Arch: same
 Depends:
- libmbedcrypto7t64 (= ${binary:Version}),
- libmbedtls14t64 (= ${binary:Version}),
- libmbedx509-1t64 (= ${binary:Version}),
+ libmbedcrypto7 (= ${binary:Version}),
+ libmbedtls14 (= ${binary:Version}),
+ libmbedx509-1 (= ${binary:Version}),
  ${misc:Depends}
 Suggests: libmbedtls-doc
 Description: lightweight crypto and SSL/TLS library - development files
@@ -39,10 +39,7 @@ Description: lightweight crypto and SSL/TLS library - development files
  .
  This package contains the header files and static libraries for mbed TLS.
 
-Package: libmbedcrypto7t64
-Provides: ${t64:Provides}
-Replaces: libmbedcrypto7
-Breaks: libmbedcrypto7 (<< ${source:Version})
+Package: libmbedcrypto7
 Architecture: any
 Multi-Arch: same
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -63,10 +60,7 @@ Description: lightweight crypto and SSL/TLS library - crypto library
  .
  This package contains the shared library handling cryptography.
 
-Package: libmbedtls14t64
-Provides: ${t64:Provides}
-Replaces: libmbedtls14
-Breaks: libmbedtls14 (<< ${source:Version})
+Package: libmbedtls14
 Architecture: any
 Multi-Arch: same
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -87,10 +81,7 @@ Description: lightweight crypto and SSL/TLS library - tls library
  .
  This package contains the shared library handling TLS.
 
-Package: libmbedx509-1t64
-Provides: ${t64:Provides}
-Replaces: libmbedx509-1
-Breaks: libmbedx509-1 (<< ${source:Version})
+Package: libmbedx509-1
 Architecture: any
 Multi-Arch: same
 Depends: ${shlibs:Depends}, ${misc:Depends}
