@@ -1,4 +1,4 @@
-libmbedx509.so.1 libmbedx509-1t64 #MINVER#
+libmbedx509.so.1 libmbedx509-1 #MINVER#
 * Build-Depends-Package: libmbedtls-dev
  mbedtls_test_ca_crt@Base 2.28.0
  mbedtls_test_ca_crt_ec@Base 2.28.0
