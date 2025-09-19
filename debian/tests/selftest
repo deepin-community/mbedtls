@@ -17,9 +17,9 @@ else
 fi
 
 # Build mbedtls_selftest shared / statically
-${CROSS_COMPILE}gcc -Wall -Werror programs/test/selftest.c -o "$AUTOPKGTEST_TMP/mbedtls_selftest" -lmbedtls -lmbedx509 -lmbedcrypto
+${CROSS_COMPILE}gcc -Wall -Werror programs/test/selftest.c -o "$AUTOPKGTEST_TMP/mbedtls_selftest" $(pkg-config --cflags --libs mbedtls mbedx509 mbedcrypto)
 echo "build1: OK"
-${CROSS_COMPILE}gcc -Wall -Werror -static programs/test/selftest.c -o "$AUTOPKGTEST_TMP/mbedtls_selftest_static" -lmbedtls -lmbedx509 -lmbedcrypto -pthread
+${CROSS_COMPILE}gcc -Wall -Werror -static programs/test/selftest.c -o "$AUTOPKGTEST_TMP/mbedtls_selftest_static" $(pkg-config --cflags --libs --static mbedtls mbedx509 mbedcrypto) -pthread
 echo "build2: OK"
 
 # Run the testsuite twice
