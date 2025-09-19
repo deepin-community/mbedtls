@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -eu
+
+cd "$AUTOPKGTEST_TMP"
+
+cat <<'EOF' > CMakeLists.txt
+cmake_minimum_required(VERSION 3.13)
+
+project("mbedtls-autopkgtest" LANGUAGES C)
+
+find_package("MbedTLS")
+
+add_executable(main "${test_file}")
+target_link_libraries(main PRIVATE MbedTLS::mbedtls)
+EOF
+
+export CFLAGS='-Wall -Wextra -Wpedantic -Werror'
+
+cmake -Dtest_file:FILEPATH="$OLDPWD/programs/ssl/mini_client.c" -B build
+cmake --build build

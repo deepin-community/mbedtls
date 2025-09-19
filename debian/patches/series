@@ -1,0 +1,2 @@
+100-fix-gcc14-build.patch
+cmake-disable-3rdparty.patch
