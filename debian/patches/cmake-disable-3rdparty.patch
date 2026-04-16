@@ -3,14 +3,13 @@ Author: Andrea Pappacoda <andrea@pappacoda.it>
 Forwarded: https://github.com/Mbed-TLS/mbedtls/pull/8284#issuecomment-2030088495
 Last-Update: 2024-04-01
 
---- mbedtls-3.6.0.orig/CMakeLists.txt
-+++ mbedtls-3.6.0/CMakeLists.txt
-@@ -290,8 +290,6 @@ add_subdirectory(framework)
+--- mbedtls-3.6.6.orig/CMakeLists.txt
++++ mbedtls-3.6.6/CMakeLists.txt
+@@ -327,7 +327,6 @@ add_subdirectory(framework)
  
  add_subdirectory(include)
  
 -add_subdirectory(3rdparty)
--
+ 
  add_subdirectory(library)
  
- add_subdirectory(pkgconfig)

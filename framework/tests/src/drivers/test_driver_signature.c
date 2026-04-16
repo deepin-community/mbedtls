@@ -15,26 +15,28 @@
 #include "psa_crypto_ecp.h"
 #include "psa_crypto_hash.h"
 #include "psa_crypto_rsa.h"
+
+#if !defined(MBEDTLS_VERSION_MAJOR) || MBEDTLS_VERSION_MAJOR >= 4
+#include "mbedtls/private/ecp.h"
+#else
 #include "mbedtls/ecp.h"
+#endif
 
 #include "test/drivers/hash.h"
 #include "test/drivers/signature.h"
-#include "test/drivers/hash.h"
 
+#if !defined(MBEDTLS_VERSION_MAJOR) || MBEDTLS_VERSION_MAJOR >= 4
+#include "mbedtls/private/ecdsa.h"
+#else
 #include "mbedtls/ecdsa.h"
+#endif
 
 #include "test/random.h"
 
 #if defined(MBEDTLS_TEST_LIBTESTDRIVER1)
-#if MBEDTLS_VERSION_MAJOR < 4
-#include "libtestdriver1/library/psa_crypto_ecp.h"
-#include "libtestdriver1/library/psa_crypto_hash.h"
-#include "libtestdriver1/library/psa_crypto_rsa.h"
-#else
-#include "libtestdriver1/tf-psa-crypto/drivers/builtin/src/psa_crypto_ecp.h"
-#include "libtestdriver1/tf-psa-crypto/drivers/builtin/src/psa_crypto_hash.h"
-#include "libtestdriver1/tf-psa-crypto/drivers/builtin/src/psa_crypto_rsa.h"
-#endif
+#include LIBTESTDRIVER1_PSA_DRIVER_INTERNAL_HEADER(psa_crypto_ecp.h)
+#include LIBTESTDRIVER1_PSA_DRIVER_INTERNAL_HEADER(psa_crypto_hash.h)
+#include LIBTESTDRIVER1_PSA_DRIVER_INTERNAL_HEADER(psa_crypto_rsa.h)
 #endif
 
 #include <string.h>
@@ -44,7 +46,7 @@ mbedtls_test_driver_signature_hooks_t
 mbedtls_test_driver_signature_hooks_t
     mbedtls_test_driver_signature_verify_hooks = MBEDTLS_TEST_DRIVER_SIGNATURE_INIT;
 
-psa_status_t sign_hash(
+static psa_status_t sign_hash(
     const psa_key_attributes_t *attributes,
     const uint8_t *key_buffer,
     size_t key_buffer_size,
@@ -112,7 +114,7 @@ psa_status_t sign_hash(
     return PSA_ERROR_NOT_SUPPORTED;
 }
 
-psa_status_t verify_hash(
+static psa_status_t verify_hash(
     const psa_key_attributes_t *attributes,
     const uint8_t *key_buffer,
     size_t key_buffer_size,

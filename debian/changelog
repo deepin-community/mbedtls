@@ -1,3 +1,12 @@
+mbedtls (3.6.6-1deepin1) unstable; urgency=medium
+
+  * New upstream version 3.6.6 (fixes CVE-2026-34877, CVE-2026-34875,
+    CVE-2026-34873, CVE-2026-34872, CVE-2026-34876, CVE-2026-34874, CVE-
+    2026-25835, CVE-2026-25833, CVE-2026-34871, CVE-2026-25834, and
+    other security issues)
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 16 Apr 2026 15:21:14 +0800
+
 mbedtls (3.6.4-2) unstable; urgency=medium
 
   * d/libmbedtls21.symbols: add new 3.6.4 symbols

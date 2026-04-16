@@ -7,6 +7,7 @@
  *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
  */
 
+#include "test_common.h"
 #include <test/helpers.h>
 #include <test/macros.h>
 #include <test/psa_exercise_key.h>
@@ -25,10 +26,25 @@
 #include <pk_internal.h>
 #endif
 #if defined(MBEDTLS_ECP_C)
+
+#if !defined(MBEDTLS_VERSION_MAJOR) || MBEDTLS_VERSION_MAJOR >= 4
+#include <mbedtls/private/ecp.h>
+#else
 #include <mbedtls/ecp.h>
+#endif
+
 #endif
 #if defined(MBEDTLS_RSA_C)
 #include <rsa_internal.h>
+#endif
+
+#if defined(__IAR_SYSTEMS_ICC__)
+/* Suppress a very overeager warning from IAR: it dislikes a forward goto
+ * that bypasses the initialization of a variable, even if that variable
+ * is not used after the jump. (This is perfectly valid C; it would only
+ * be invalid C if jumping into a block from outside that block.)
+ */
+#pragma diag_suppress=Pe546 // transfer of control bypasses initialization
 #endif
 
 #if defined(MBEDTLS_PSA_CRYPTO_SE_C)
@@ -1395,8 +1411,14 @@ int mbedtls_test_key_consistency_psa_pk(mbedtls_svc_key_id_t psa_key,
     size_t pk_public_length = 0;
 
     switch (pk_type) {
-#if defined(MBEDTLS_RSA_C)
+#if defined(MBEDTLS_RSA_C) || defined(MBEDTLS_PK_USE_PSA_RSA_DATA)
         case MBEDTLS_PK_RSA:
+#if defined(MBEDTLS_PK_USE_PSA_RSA_DATA)
+            TEST_ASSERT(PSA_KEY_TYPE_IS_RSA(psa_type));
+            pk_public = pk->pub_raw;
+            pk_public_length = pk->pub_raw_len;
+            break;
+#else /* MBEDTLS_PK_USE_PSA_RSA_DATA */
             TEST_ASSERT(PSA_KEY_TYPE_IS_RSA(psa_type));
             const mbedtls_rsa_context *rsa = mbedtls_pk_rsa(*pk);
             uint8_t *const end = pk_public_buffer + sizeof(pk_public_buffer);
@@ -1406,8 +1428,10 @@ int mbedtls_test_key_consistency_psa_pk(mbedtls_svc_key_id_t psa_key,
             pk_public = cursor;
             pk_public_length = end - pk_public;
             break;
-#endif
+#endif /* MBEDTLS_PK_USE_PSA_RSA_DATA */
+#endif /* MBEDTLS_RSA_C || MBEDTLS_PK_USE_PSA_RSA_DATA */
 
+#if defined(PSA_WANT_KEY_TYPE_ECC_PUBLIC_KEY)
 #if defined(MBEDTLS_PK_USE_PSA_EC_DATA)
         case MBEDTLS_PK_ECKEY:
         case MBEDTLS_PK_ECKEY_DH:
@@ -1417,9 +1441,7 @@ int mbedtls_test_key_consistency_psa_pk(mbedtls_svc_key_id_t psa_key,
             pk_public = pk->pub_raw;
             pk_public_length = pk->pub_raw_len;
             break;
-#endif /* MBEDTLS_PK_USE_PSA_EC_DATA */
-
-#if defined(PSA_WANT_KEY_TYPE_ECC_PUBLIC_KEY) && !defined(MBEDTLS_PK_USE_PSA_EC_DATA)
+#else /* MBEDTLS_PK_USE_PSA_EC_DATA */
         case MBEDTLS_PK_ECKEY:
         case MBEDTLS_PK_ECKEY_DH:
         case MBEDTLS_PK_ECDSA:
@@ -1430,7 +1452,8 @@ int mbedtls_test_key_consistency_psa_pk(mbedtls_svc_key_id_t psa_key,
                            pk_public_buffer, sizeof(pk_public_buffer)), 0);
             pk_public = pk_public_buffer;
             break;
-#endif /* PSA_WANT_KEY_TYPE_ECC_PUBLIC_KEY && !MBEDTLS_PK_USE_PSA_EC_DATA */
+#endif /* MBEDTLS_PK_USE_PSA_EC_DATA */
+#endif /* PSA_WANT_KEY_TYPE_ECC_PUBLIC_KEY */
 
 #if defined(MBEDTLS_USE_PSA_CRYPTO)
         case MBEDTLS_PK_OPAQUE:

@@ -12,18 +12,19 @@
 #include "psa/crypto.h"
 #include "psa_crypto_cipher.h"
 #include "psa_crypto_core.h"
+
+#if !defined(MBEDTLS_VERSION_MAJOR) || MBEDTLS_VERSION_MAJOR >= 4
+#include "mbedtls/private/cipher.h"
+#else
 #include "mbedtls/cipher.h"
+#endif
 
 #include "test/drivers/cipher.h"
 
 #include "test/random.h"
 
 #if defined(MBEDTLS_TEST_LIBTESTDRIVER1)
-#if MBEDTLS_VERSION_MAJOR < 4
-#include "libtestdriver1/library/psa_crypto_cipher.h"
-#else
-#include "libtestdriver1/tf-psa-crypto/drivers/builtin/src/psa_crypto_cipher.h"
-#endif
+#include LIBTESTDRIVER1_PSA_DRIVER_INTERNAL_HEADER(psa_crypto_cipher.h)
 #endif
 
 #include <string.h>
