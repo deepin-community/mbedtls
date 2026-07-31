@@ -1,0 +1,59 @@
+From a41747ac8e824b5cb9ed6874a688a4d5a578e10c Mon Sep 17 00:00:00 2001
+From: Rany Hany <rany_hany@riseup.net>
+Date: Mon, 13 May 2024 20:09:44 +0300
+Subject: [PATCH] mbedtls: fix build on GCC 14
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Bug: https://github.com/Mbed-TLS/mbedtls/issues/9003
+Forwarded: https://github.com/Mbed-TLS/mbedtls/issues/9003
+Origin: vendor, https://github.com/openwrt/openwrt/commit/a41747ac8e824b5cb9ed6874a688a4d5a578e10c
+Last-Update: 2024-11-06
+
+Without this patch, GCC 14 incorrectly complains about the following error:
+
+In file included from /home/user/workspace/mbedtls/library/ctr_drbg.c:13:
+In function ‘mbedtls_xor’,
+    inlined from ‘ctr_drbg_update_internal’ at /home/user/workspace/mbedtls/library/ctr_drbg.c:372:5:
+/home/user/workspace/mbedtls/library/common.h:235:17: error: array subscript 48 is outside array bounds of ‘unsigned char[48]’ [-Werror=array-bounds=]
+  235 |         r[i] = a[i] ^ b[i];
+      |                ~^~~
+/home/user/workspace/mbedtls/library/ctr_drbg.c: In function ‘ctr_drbg_update_internal’:
+/home/user/workspace/mbedtls/library/ctr_drbg.c:335:19: note: at offset 48 into object ‘tmp’ of size 48
+  335 |     unsigned char tmp[MBEDTLS_CTR_DRBG_SEEDLEN];
+      |                   ^~~
+In function ‘mbedtls_xor’,
+    inlined from ‘ctr_drbg_update_internal’ at /home/user/workspace/mbedtls/library/ctr_drbg.c:372:5:
+/home/user/workspace/mbedtls/library/common.h:235:24: error: array subscript 48 is outside array bounds of ‘const unsigned char[48]’ [-Werror=array-bounds=]
+  235 |         r[i] = a[i] ^ b[i];
+      |                       ~^~~
+/home/user/workspace/mbedtls/library/ctr_drbg.c: In function ‘ctr_drbg_update_internal’:
+/home/user/workspace/mbedtls/library/ctr_drbg.c:333:57: note: at offset 48 into object ‘data’ of size [0, 48]
+  333 |                                     const unsigned char data[MBEDTLS_CTR_DRBG_SEEDLEN])
+      |                                     ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function ‘mbedtls_xor’,
+    inlined from ‘ctr_drbg_update_internal’ at /home/user/workspace/mbedtls/library/ctr_drbg.c:372:5:
+/home/user/workspace/mbedtls/library/common.h:235:14: error: array subscript 48 is outside array bounds of ‘unsigned char[48]’ [-Werror=array-bounds=]
+  235 |         r[i] = a[i] ^ b[i];
+      |         ~~~~~^~~~~~~~~~~~~
+/home/user/workspace/mbedtls/library/ctr_drbg.c: In function ‘ctr_drbg_update_internal’:
+/home/user/workspace/mbedtls/library/ctr_drbg.c:335:19: note: at offset 48 into object ‘tmp’ of size 48
+  335 |     unsigned char tmp[MBEDTLS_CTR_DRBG_SEEDLEN];
+      |                   ^~~
+
+This change adds a basic check to silence the warning until a solution is worked on upstream.
+As this check is already used by another compiler, it shouldn't cause any issues for us.
+
+Signed-off-by: Rany Hany <rany_hany@riseup.net>
+
+--- a/library/common.h
++++ b/library/common.h
+@@ -199,7 +199,7 @@ static inline void mbedtls_xor(unsigned
+         uint8x16_t x = veorq_u8(v1, v2);
+         vst1q_u8(r + i, x);
+     }
+-#if defined(__IAR_SYSTEMS_ICC__)
++#if defined(__IAR_SYSTEMS_ICC__) || (defined(MBEDTLS_COMPILER_IS_GCC) && MBEDTLS_GCC_VERSION >= 140100)
+     /* This if statement helps some compilers (e.g., IAR) optimise out the byte-by-byte tail case
+      * where n is a constant multiple of 16.
+      * For other compilers (e.g. recent gcc and clang) it makes no difference if n is a compile-time
