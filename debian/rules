@@ -24,7 +24,7 @@ endif
 %:
 	dh $@ --buildsystem=cmake
 
-CONFIG_H = include/mbedtls/config.h
+CONFIG_H := include/mbedtls/mbedtls_config.h
 
 execute_after_dh_auto_clean:
 	[ ! -e $(CONFIG_H).bak ] || mv $(CONFIG_H).bak $(CONFIG_H)
@@ -32,15 +32,11 @@ execute_after_dh_auto_clean:
 override_dh_auto_configure:
 	cp $(CONFIG_H) $(CONFIG_H).bak
 	scripts/config.py set MBEDTLS_DEPRECATED_WARNING
-	scripts/config.py set MBEDTLS_HAVEGE_C
-	scripts/config.py set MBEDTLS_MD2_C
-	scripts/config.py set MBEDTLS_MD4_C
 	scripts/config.py set MBEDTLS_THREADING_C
 	scripts/config.py set MBEDTLS_THREADING_PTHREAD
 	scripts/config.py set MBEDTLS_CMAC_C
 	scripts/config.py set MBEDTLS_SSL_DTLS_SRTP
 	dh_auto_configure -- \
-		-DLIB_INSTALL_DIR="lib/$(DEB_HOST_MULTIARCH)" \
 		-DUSE_STATIC_MBEDTLS_LIBRARY=ON \
 		-DUSE_SHARED_MBEDTLS_LIBRARY=ON \
 		-DENABLE_PROGRAMS=OFF \

@@ -1,4 +1,6 @@
-usr/include
-usr/lib/*/*.a
-usr/lib/*/*.so
-usr/lib/*/pkgconfig/
+usr/include/mbedtls/
+usr/include/psa/
+usr/lib/*/libmbed*.a
+usr/lib/*/libmbed*.so
+usr/lib/*/cmake/MbedTLS/
+usr/lib/*/pkgconfig/mbed*.pc

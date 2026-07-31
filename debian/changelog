@@ -1,8 +1,100 @@
-mbedtls (2.28.8-1deepin1) unstable; urgency=medium
+mbedtls (3.6.5-0.1~deb13u1) trixie; urgency=medium
 
-  * Revert t64.
+  * Non-maintainer upload.
+  * Rebuild for trixie.
 
- -- xiangzelong <xiangzelong@deepin.org>  Sat, 14 Sep 2024 09:53:44 +0800
+ -- Adrian Bunk <bunk@debian.org>  Fri, 02 Jan 2026 23:05:58 +0200
+
+mbedtls (3.6.5-0.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * New upstream release.
+    - CVE-2025-54764: Side channel in RSA key generation and operations
+      (Closes: #1118750)
+    - CVE-2025-59438: Padding oracle through timing of cipher error reporting
+      (Closes: #1118752)
+
+ -- Adrian Bunk <bunk@debian.org>  Fri, 14 Nov 2025 22:00:32 +0200
+
+mbedtls (3.6.4-2) unstable; urgency=medium
+
+  * d/libmbedtls21.symbols: add new 3.6.4 symbols
+
+ -- Andrea Pappacoda <tachi@debian.org>  Mon, 14 Jul 2025 15:19:49 +0200
+
+mbedtls (3.6.4-1) unstable; urgency=medium
+
+  * New upstream version 3.6.4
+    - Closes: #1108785 (CVE-2025-52496)
+    - Closes: #1108786 (CVE-2025-52497)
+    - Closes: #1108787 (CVE-2025-49600)
+    - Closes: #1108788 (CVE-2025-49601)
+
+ -- Andrea Pappacoda <tachi@debian.org>  Sun, 13 Jul 2025 13:26:04 +0200
+
+mbedtls (3.6.3-1) unstable; urgency=medium
+
+  * New upstream version 3.6.3
+    - Fixes CVE-2025-27809
+    - Fixes CVE-2025-27810
+    - Closes: #1101499
+  * d/control: use my @debian.org email address
+  * d/control: apply X-Style: black
+  * d/control: declare dpkg-build-api = 1
+  * d/.symbols: mark private symbol as optional, add new ones
+
+ -- Andrea Pappacoda <tachi@debian.org>  Sat, 05 Apr 2025 15:45:07 +0200
+
+mbedtls (3.6.2-3) unstable; urgency=medium
+
+  [ Reinhard Tartler ]
+  * Update 100-fix-gcc14-build to patch the correct file
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Sun, 17 Nov 2024 18:23:19 +0100
+
+mbedtls (3.6.2-2) unstable; urgency=medium
+
+  * d/patches: fix builds with GCC 14.
+    Thanks to Adrian, Christian, and Emilio for the report! (Closes: #1085354)
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Wed, 06 Nov 2024 12:54:54 +0100
+
+mbedtls (3.6.2-1) unstable; urgency=low
+
+  * New upstream version 3.6.2
+  * d/.symbols: add new symbols, mark private as optional
+  * d/watch: fixup checking of new 3.6 releases
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Mon, 21 Oct 2024 16:25:05 +0200
+
+mbedtls (3.6.0-3) unstable; urgency=medium
+
+  * Upload to unstable
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Thu, 17 Oct 2024 23:06:32 +0200
+
+mbedtls (3.6.0-2) experimental; urgency=medium
+
+  * d/.symbols: mark aesni symbols as x86-only
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Wed, 10 Apr 2024 07:27:06 +0200
+
+mbedtls (3.6.0-1) experimental; urgency=medium
+
+  * New upstream version 3.6.0
+    - TLS 1.3 enabled by default. Closes: #971393
+    - MBEDTLS_NIST_KW_C enabled by default. Closes: #1053533
+    - Fixes CVE-2024-28960 (fixed in 2.28.8 too)
+  * d/control: new SONAME, new packages
+  * d/copyright: document Project Everest copyright
+  * d/libmbedtls-dev.install: install new CMake Config files (Closes: #1036231)
+  * d/patches: skip compiling 3rdparty code
+  * d/tests: test new CMake Config files
+  * d/tests/selftest: use the new pkg-config files
+  * d/watch: switch to 3.6.x LTS branch
+  * d/watch: use official release tarball
+
+ -- Andrea Pappacoda <andrea@pappacoda.it>  Mon, 01 Apr 2024 22:55:20 +0200
 
 mbedtls (2.28.8-1) unstable; urgency=medium
 

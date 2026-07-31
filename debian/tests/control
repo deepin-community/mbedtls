@@ -1,2 +1,10 @@
-Tests: build, selftest
-Depends: @, gcc, libc6-dev | libc-dev
+Tests:
+ build,
+ cmake,
+ selftest,
+Depends:
+ cmake,
+ gcc,
+ libc6-dev | libc-dev,
+ pkg-config,
+ @,
